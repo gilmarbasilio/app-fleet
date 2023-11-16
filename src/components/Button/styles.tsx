@@ -4,6 +4,7 @@ import { TypeButton } from ".";
 
 type ContainerProps = {
   type: TypeButton;
+  isLoading?: boolean;
 };
 
 export const Container = styled.TouchableOpacity<ContainerProps>`
@@ -21,6 +22,8 @@ export const Container = styled.TouchableOpacity<ContainerProps>`
   ${(props) =>
     props.type === "outlined" &&
     `background-color: ${props.theme.colors.black_700};`}
+
+  ${(props) => props.isLoading && `opacity: 0.5;`}
 `;
 
 export const Title = styled.Text`
@@ -28,3 +31,7 @@ export const Title = styled.Text`
   font-size: ${({ theme }) => theme.font_size.md}px;
   font-family: ${({ theme }) => theme.font_family.extra_bold};
 `;
+
+export const ActivityIndicator = styled.ActivityIndicator.attrs({
+  color: "white",
+})``;

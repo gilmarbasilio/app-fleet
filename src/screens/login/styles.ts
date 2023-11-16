@@ -12,10 +12,12 @@ export const Container = styled(SafeAreaView)`
   flex: 1;
 `;
 
+export const ScrollView = styled.ScrollView``;
+
 export const LogoContainer = styled.View`
   align-items: center;
   justify-content: center;
-  height: 33%;
+  height: 200px;
 `;
 
 export const Logo = styled.Image`
@@ -25,7 +27,7 @@ export const Logo = styled.Image`
 export const FormContainer = styled.View`
   padding: 0 30px;
   gap: 20px;
-  margin-bottom: 130px;
+  margin-bottom: 30px;
 `;
 
 export const TitleForm = styled.Text`
@@ -42,7 +44,9 @@ export const ButtonLogin = styled(Button)`
 
 export const CreateAccountContainer = styled.View`
   padding: 0 30px;
-  gap: 20px;
+  gap: 10px;
+  flex: 1;
+  justify-content: flex-end;
 `;
 
 export const ButtonCreateAccount = styled(Button)``;

@@ -5,7 +5,9 @@ import { TextInputForm } from "../../components/TextInputForm";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { KeyboardAvoidingView } from "react-native";
+import { useState } from "react";
+import { loginService } from "../../shared/services/auth.service";
+import { saveAuthTokenStorage } from "../../shared/storage/authToken.storage";
 
 const loginSchema = z.object({
   email: z
@@ -27,6 +29,7 @@ const loginSchema = z.object({
 type LoginSchema = z.infer<typeof loginSchema>;
 
 const LoginScreen = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const {
     control,
     handleSubmit,
@@ -35,33 +38,50 @@ const LoginScreen = () => {
     resolver: zodResolver(loginSchema),
   });
 
-  const handleLogin = (data: LoginSchema) => {
-    console.log({ data });
+  const handleLogin = async (data: LoginSchema) => {
+    try {
+      setIsLoading(true);
+
+      const response = await loginService({
+        email: data.email,
+        password: data.password,
+      });
+
+      await saveAuthTokenStorage({ token: response.token });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
   };
   console.log({ errors: JSON.stringify(errors) });
   return (
     <S.ImageBackground source={loginBackground}>
-      <S.Container>
-        <S.LogoContainer>
-          <S.Logo source={logoAndSlogan} />
-        </S.LogoContainer>
-        <S.FormContainer>
-          <S.TitleForm>Acesse sua conta</S.TitleForm>
-          <TextInputForm
-            control={control}
-            name="email"
-            label="E-mail"
-            keyboardType="email-address"
-          />
-          <TextInputForm
-            control={control}
-            name="password"
-            label="Senha"
-            secureText
-          />
-          <S.ButtonLogin title="Entrar" onPress={handleSubmit(handleLogin)} />
-        </S.FormContainer>
-        <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding">
+      <S.ScrollView showsVerticalScrollIndicator={false}>
+        <S.Container>
+          <S.LogoContainer>
+            <S.Logo source={logoAndSlogan} />
+          </S.LogoContainer>
+          <S.FormContainer>
+            <S.TitleForm>Acesse sua conta</S.TitleForm>
+            <TextInputForm
+              control={control}
+              name="email"
+              label="E-mail"
+              keyboardType="email-address"
+            />
+            <TextInputForm
+              control={control}
+              name="password"
+              label="Senha"
+              secureText
+            />
+            <S.ButtonLogin
+              title="Entrar"
+              onPress={handleSubmit(handleLogin)}
+              isLoading={isLoading}
+            />
+          </S.FormContainer>
           <S.CreateAccountContainer>
             <S.TitleCreateAccount>Ainda não tem acesso?</S.TitleCreateAccount>
             <S.ButtonCreateAccount
@@ -70,8 +90,8 @@ const LoginScreen = () => {
               onPress={() => null}
             />
           </S.CreateAccountContainer>
-        </KeyboardAvoidingView>
-      </S.Container>
+        </S.Container>
+      </S.ScrollView>
     </S.ImageBackground>
   );
 };
