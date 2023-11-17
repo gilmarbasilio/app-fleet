@@ -15,7 +15,10 @@ const theme = {
     gray_600: "#323238",
     black_700: "#121214",
 
-    error: "#ff0000",
+    success: "#00c851",
+    warning: "#ffbb33",
+    info: "#33b5e5",
+    danger: "#ff0000",
   },
   font_family: {
     regular: "Lato_400Regular",

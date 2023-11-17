@@ -10,6 +10,8 @@ import {
 } from "@expo-google-fonts/lato";
 import { Loading } from "./src/components/Loading";
 import { StatusBar } from "react-native";
+import { RootSiblingParent } from "react-native-root-siblings";
+import { Toast } from "./src/components/Toast";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -23,15 +25,18 @@ export default function App() {
   }
 
   return (
-    <ThemeProvider theme={theme}>
-      <StatusBar
-        barStyle="light-content"
-        backgroundColor="transparent"
-        translucent
-      />
-      <NavigationContainer>
-        <Routes />
-      </NavigationContainer>
-    </ThemeProvider>
+    <RootSiblingParent>
+      <ThemeProvider theme={theme}>
+        <StatusBar
+          barStyle="light-content"
+          backgroundColor="transparent"
+          translucent
+        />
+        <NavigationContainer>
+          <Routes />
+        </NavigationContainer>
+        <Toast />
+      </ThemeProvider>
+    </RootSiblingParent>
   );
 }

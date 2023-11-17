@@ -1,3 +1,4 @@
+import axios from "axios";
 import api from "../../config/api";
 
 export interface ILoginServiceRequest {
@@ -12,6 +13,35 @@ export interface ILoginServiceResponse {
 export const loginService = async (
   data: ILoginServiceRequest
 ): Promise<ILoginServiceResponse> => {
-  const response = await api.post<ILoginServiceResponse>(`/auth/login`, data);
-  return response.data;
+  try {
+    const response = await api.post<ILoginServiceResponse>(`/auth/login`, data);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(error.response?.data?.message);
+    }
+    throw error;
+  }
+};
+
+export interface IRegisterServiceRequest {
+  name: string;
+  email: string;
+  password: string;
+}
+
+export interface IRegisterServiceResponse {}
+
+export const registerService = async (
+  data: IRegisterServiceRequest
+): Promise<IRegisterServiceResponse> => {
+  try {
+    const response = await api.post<IRegisterServiceResponse>(`/users`, data);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(error.response?.data?.message);
+    }
+    throw error;
+  }
 };

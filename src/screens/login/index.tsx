@@ -8,6 +8,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { loginService } from "../../shared/services/auth.service";
 import { saveAuthTokenStorage } from "../../shared/storage/authToken.storage";
+import { useToastStore } from "../../shared/store/useToastStore";
+import {
+  NativeStackNavigationProp,
+  NativeStackScreenProps,
+} from "@react-navigation/native-stack";
+import { PublicStackParamList } from "../../routes/public.routes";
+import { useNavigation } from "@react-navigation/native";
 
 const loginSchema = z.object({
   email: z
@@ -28,8 +35,15 @@ const loginSchema = z.object({
 
 type LoginSchema = z.infer<typeof loginSchema>;
 
+type LoginScreenProps = NativeStackNavigationProp<
+  PublicStackParamList,
+  "LoginScreen"
+>;
+
 const LoginScreen = () => {
+  const { navigate } = useNavigation<LoginScreenProps>();
   const [isLoading, setIsLoading] = useState(false);
+  const setMessageToast = useToastStore((state) => state.setMessage);
   const {
     control,
     handleSubmit,
@@ -48,13 +62,16 @@ const LoginScreen = () => {
       });
 
       await saveAuthTokenStorage({ token: response.token });
-    } catch (error) {
-      console.error(error);
+    } catch (error: any) {
+      setMessageToast({
+        type: "danger",
+        text: error.message,
+      });
     } finally {
       setIsLoading(false);
     }
   };
-  console.log({ errors: JSON.stringify(errors) });
+
   return (
     <S.ImageBackground source={loginBackground}>
       <S.ScrollView showsVerticalScrollIndicator={false}>
@@ -87,7 +104,7 @@ const LoginScreen = () => {
             <S.ButtonCreateAccount
               title="Criar conta"
               type="outlined"
-              onPress={() => null}
+              onPress={() => navigate("RegisterScreen")}
             />
           </S.CreateAccountContainer>
         </S.Container>

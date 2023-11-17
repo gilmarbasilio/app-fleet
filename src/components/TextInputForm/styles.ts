@@ -17,7 +17,7 @@ export const TextInput = styled.TextInput.attrs({
 `;
 
 export const TextInputError = styled.Text`
-  color: ${({ theme }) => theme.colors.error};
+  color: ${({ theme }) => theme.colors.danger};
   font-size: ${({ theme }) => theme.font_size.sm}px;
   font-family: ${({ theme }) => theme.font_family.regular};
   margin-top: 7px;
