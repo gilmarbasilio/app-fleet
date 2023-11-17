@@ -1,5 +1,5 @@
 import axios from "axios";
-import api from "../../config/api";
+import api, { addAccessTokenOnRequest } from "../../config/api";
 
 export interface ILoginServiceRequest {
   email: string;
@@ -45,3 +45,22 @@ export const registerService = async (
     throw error;
   }
 };
+
+export interface IUserLoggedServiceResponse {
+  id: string;
+  name: string;
+  email: string;
+}
+
+export const getUserLoggedService =
+  async (): Promise<IUserLoggedServiceResponse> => {
+    try {
+      const response = await api.get<IUserLoggedServiceResponse>(`/auth/me`);
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        throw new Error(error.response?.data?.message);
+      }
+      throw error;
+    }
+  };

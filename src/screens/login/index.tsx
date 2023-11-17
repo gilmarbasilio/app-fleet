@@ -6,7 +6,10 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
-import { loginService } from "../../shared/services/auth.service";
+import {
+  getUserLoggedService,
+  loginService,
+} from "../../shared/services/auth.service";
 import { saveAuthTokenStorage } from "../../shared/storage/authToken.storage";
 import { useToastStore } from "../../shared/store/useToastStore";
 import {
@@ -15,6 +18,8 @@ import {
 } from "@react-navigation/native-stack";
 import { PublicStackParamList } from "../../routes/public.routes";
 import { useNavigation } from "@react-navigation/native";
+import { useAuthStore } from "../../shared/store/useAuthStore";
+import api from "../../config/api";
 
 const loginSchema = z.object({
   email: z
@@ -44,6 +49,8 @@ const LoginScreen = () => {
   const { navigate } = useNavigation<LoginScreenProps>();
   const [isLoading, setIsLoading] = useState(false);
   const setMessageToast = useToastStore((state) => state.setMessage);
+  const setUser = useAuthStore((state) => state.setUser);
+  const setToken = useAuthStore((state) => state.setToken);
   const {
     control,
     handleSubmit,
@@ -61,7 +68,16 @@ const LoginScreen = () => {
         password: data.password,
       });
 
-      await saveAuthTokenStorage({ token: response.token });
+      setToken(response.token);
+
+      api.defaults.headers.Authorization = `Bearer ${response.token}`;
+
+      const userLogged = await getUserLoggedService();
+
+      setUser({
+        id: userLogged.id,
+        name: userLogged.name,
+      });
     } catch (error: any) {
       setMessageToast({
         type: "danger",
