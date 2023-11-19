@@ -1,10 +1,10 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import LoginScreen from "../screens/login";
-import RegisterScreen from "../screens/register";
+import LoginScreen from "../modules/auth/screens/LoginScreen";
+import CreateAccountScreen from "../modules/auth/screens/CreateAccountScreen";
 
 export type PublicStackParamList = {
   LoginScreen: undefined;
-  RegisterScreen: undefined;
+  CreateAccountScreen: undefined;
 };
 
 const Stack = createNativeStackNavigator();
@@ -18,7 +18,10 @@ const PublicRoutes = () => {
       initialRouteName="LoginScreen"
     >
       <Stack.Screen name="LoginScreen" component={LoginScreen} />
-      <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
+      <Stack.Screen
+        name="CreateAccountScreen"
+        component={CreateAccountScreen}
+      />
     </Stack.Navigator>
   );
 };

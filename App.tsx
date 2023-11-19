@@ -8,10 +8,11 @@ import {
   Lato_700Bold,
   Lato_900Black,
 } from "@expo-google-fonts/lato";
-import { Loading } from "./src/components/Loading";
+import { Loading } from "./src/shared/components/Loading";
 import { StatusBar } from "react-native";
 import { RootSiblingParent } from "react-native-root-siblings";
-import { Toast } from "./src/components/Toast";
+import { Toast } from "./src/shared/components/Toast";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -27,15 +28,19 @@ export default function App() {
   return (
     <RootSiblingParent>
       <ThemeProvider theme={theme}>
-        <StatusBar
-          barStyle="light-content"
-          backgroundColor="transparent"
-          translucent
-        />
-        <NavigationContainer>
-          <Routes />
-        </NavigationContainer>
-        <Toast />
+        <SafeAreaProvider
+          style={{ flex: 1, backgroundColor: theme.colors.black_700 }}
+        >
+          <StatusBar
+            barStyle="light-content"
+            backgroundColor="transparent"
+            translucent
+          />
+          <NavigationContainer>
+            <Routes />
+          </NavigationContainer>
+          <Toast />
+        </SafeAreaProvider>
       </ThemeProvider>
     </RootSiblingParent>
   );
