@@ -13,6 +13,7 @@ import { ScrollView } from "react-native";
 import { useEffect, useState } from "react";
 import {
   LocationAccuracy,
+  LocationObjectCoords,
   LocationSubscription,
   useForegroundPermissions,
   watchPositionAsync,
@@ -20,7 +21,7 @@ import {
 import { getAddressLocation } from "../../../../shared/utils/getAddressLocation";
 import { Loading } from "../../../../shared/components/Loading";
 import LocationInfo from "../../components/LocationInfo";
-import { Car } from "phosphor-react-native";
+import Map from "../../../../shared/components/Map";
 
 const registerCarUseSchema = z
   .object({
@@ -64,6 +65,8 @@ const RegisterCarScreen = () => {
   const setMessageToast = useToastStore((state) => state.setMessage);
   const [isLoadingLocation, setIsLoadingLocation] = useState(true);
   const [currentAddress, setCurrentAddress] = useState<string | null>(null);
+  const [currentCoords, setCurrentCoords] =
+    useState<LocationObjectCoords | null>(null);
 
   const [locationForegroundPermission, requestLocationForegroundPermission] =
     useForegroundPermissions();
@@ -94,6 +97,7 @@ const RegisterCarScreen = () => {
       },
       (location) => {
         console.log(location);
+        setCurrentCoords(location.coords);
         getAddressLocation(location.coords)
           .then((address) => {
             if (address) {
@@ -128,10 +132,14 @@ const RegisterCarScreen = () => {
     <S.Container>
       <HeaderRegisterCar title="Saída" />
       <ScrollView>
+        {currentCoords && <Map coordinates={[currentCoords]} />}
         <S.FormContainer>
           {currentAddress && (
             <LocationInfo
-              icon={Car}
+              icon={{
+                iconName: "FontAwesome5",
+                name: "car",
+              }}
               label="Localização atual"
               description={currentAddress}
             />

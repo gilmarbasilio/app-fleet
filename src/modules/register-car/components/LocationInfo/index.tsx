@@ -8,6 +8,7 @@ import { FontAwesome } from "@expo/vector-icons";
 import theme from "../../../../shared/theme";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import IconBox, { IconBoxProps } from "../IconBox";
+import { IconBoxFamily } from "../IconBox/types";
 
 type LocationInfoNavigationProps = NativeStackNavigationProp<
   PrivateStackParamList,
@@ -20,7 +21,7 @@ export type LocationInfoProps = {
 };
 
 type Props = LocationInfoProps & {
-  icon: IconBoxProps;
+  icon: IconBoxFamily;
 };
 
 const LocationInfo = ({ label, description, icon }: Props) => {

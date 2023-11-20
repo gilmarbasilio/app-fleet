@@ -2,13 +2,13 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import styled from "styled-components/native";
 
 export const Container = styled.View`
-  background-color: ${({ theme }) => theme.colors.gray_700};
   flex-direction: row;
   align-items: center;
 `;
 
 export const Info = styled.View`
   flex: 1;
+  gap: 5px;
 `;
 
 export const Label = styled.Text`

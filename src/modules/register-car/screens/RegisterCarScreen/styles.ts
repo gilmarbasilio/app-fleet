@@ -5,13 +5,13 @@ import { Button } from "../../../../shared/components/Button";
 export const Container = styled(SafeAreaView)`
   flex: 1;
   background-color: ${({ theme }) => theme.colors.black_700};
-  gap: 30px;
 `;
 
 export const FormContainer = styled.View`
   flex: 1;
   gap: 16px;
   padding: 0 32px;
+  margin-top: 32px;
 `;
 
 export const ButtonRegisterOutput = styled(Button)`
