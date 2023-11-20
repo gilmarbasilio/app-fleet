@@ -2,7 +2,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import styled from "styled-components/native";
 import { Button } from "../../../../shared/components/Button";
 
-export const Container = styled(SafeAreaView)`
+export const Container = styled.View`
   flex: 1;
   background-color: ${({ theme }) => theme.colors.black_700};
 `;

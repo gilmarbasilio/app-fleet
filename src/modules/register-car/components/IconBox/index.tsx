@@ -1,5 +1,5 @@
 import * as S from "./styles";
-import { useTheme } from "styled-components";
+import { useTheme } from "styled-components/native";
 import { IconComponentMap, IconBoxFamily } from "./types";
 
 export type IconBoxProps = {

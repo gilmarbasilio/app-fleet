@@ -9,7 +9,7 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import JustificationInput from "../../components/JustificationInput";
-import { ScrollView } from "react-native";
+import { Alert, ScrollView } from "react-native";
 import { useEffect, useState } from "react";
 import {
   LocationAccuracy,
@@ -17,41 +17,25 @@ import {
   LocationSubscription,
   useForegroundPermissions,
   watchPositionAsync,
+  requestForegroundPermissionsAsync,
 } from "expo-location";
 import { getAddressLocation } from "../../../../shared/utils/getAddressLocation";
 import { Loading } from "../../../../shared/components/Loading";
 import LocationInfo from "../../components/LocationInfo";
 import Map from "../../../../shared/components/Map";
 
-const registerCarUseSchema = z
-  .object({
-    name: z
-      .string({
-        required_error: "O nome é obrigatório",
-      })
-      .min(3, { message: "O nome tem que ter no mínimo 3 caracteres" }),
-    email: z
-      .string({
-        required_error: "Email é obrigatório",
-      })
-      .email({
-        message: "Email é inválido",
-      }),
-    password: z
-      .string({
-        required_error: "A senha é obrigatória",
-      })
-      .min(6, {
-        message: "A senha tem que ter no minimo 6 caracteres",
-      }),
-    confirmPassword: z.string({
-      required_error: "A confirmação de sernha é obrigatória",
-    }),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "A confirmação de senha não é igual a senha",
-    path: ["confirmPassword"],
-  });
+const registerCarUseSchema = z.object({
+  plate: z
+    .string({
+      required_error: "A placa é obrigatória",
+    })
+    .min(8, { message: "O nome tem que ter no mínimo 8 caracteres" }),
+  justification: z
+    .string({
+      required_error: "Justificativa é obrigatória",
+    })
+    .min(3, { message: "O nome tem que ter no mínimo 3 caracteres" }),
+});
 
 type RegisterCarUseSchema = z.infer<typeof registerCarUseSchema>;
 
@@ -128,6 +112,18 @@ const RegisterCarScreen = () => {
     return <Loading />;
   }
 
+  const handleDepartureRegister = async (data: RegisterCarUseSchema) => {
+    const backgroundPermissions = await requestForegroundPermissionsAsync();
+    if (!backgroundPermissions.granted) {
+      return Alert.alert(
+        "Localização",
+        'É necessário permitir que o App tenhar acesso a localização em segundo plano. Acesse as configurações do dispositivo e habilite "Permitir o tempo todo".'
+      );
+    }
+  };
+
+  console.log({ errors });
+
   return (
     <S.Container>
       <HeaderRegisterCar title="Saída" />
@@ -157,7 +153,7 @@ const RegisterCarScreen = () => {
           />
           <S.ButtonRegisterOutput
             title="Registrar Saída"
-            onPress={() => null}
+            onPress={handleSubmit(handleDepartureRegister)}
           />
         </S.FormContainer>
       </ScrollView>
