@@ -18,11 +18,13 @@ import {
   useForegroundPermissions,
   watchPositionAsync,
   requestForegroundPermissionsAsync,
+  requestBackgroundPermissionsAsync,
 } from "expo-location";
 import { getAddressLocation } from "../../../../shared/utils/getAddressLocation";
 import { Loading } from "../../../../shared/components/Loading";
 import LocationInfo from "../../components/LocationInfo";
 import Map from "../../../../shared/components/Map";
+import { startLocationTask } from "../../../../shared/tasks/backgroundLocationTask";
 
 const registerCarUseSchema = z.object({
   plate: z
@@ -113,13 +115,16 @@ const RegisterCarScreen = () => {
   }
 
   const handleDepartureRegister = async (data: RegisterCarUseSchema) => {
-    const backgroundPermissions = await requestForegroundPermissionsAsync();
+    const backgroundPermissions = await requestBackgroundPermissionsAsync();
+    console.log({ backgroundPermissions });
     if (!backgroundPermissions.granted) {
       return Alert.alert(
         "Localização",
         'É necessário permitir que o App tenhar acesso a localização em segundo plano. Acesse as configurações do dispositivo e habilite "Permitir o tempo todo".'
       );
     }
+
+    await startLocationTask();
   };
 
   console.log({ errors });

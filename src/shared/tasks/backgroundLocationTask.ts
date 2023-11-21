@@ -5,30 +5,36 @@ import {
   stopLocationUpdatesAsync,
 } from "expo-location";
 import * as TaskManager from "expo-task-manager";
+import { useLocationStore } from "../store/uselocationStorage";
 
 export const LOCATION_TASK_NAME = "locatio-tracking";
 
-TaskManager.defineTask(LOCATION_TASK_NAME, ({ data, error }: any) => {
+TaskManager.defineTask(LOCATION_TASK_NAME, async ({ data, error }: any) => {
+  const setLocation = useLocationStore((state) => state.setLocation);
+
   try {
     if (error) {
       throw error;
     }
 
-    const { coords, timestamp } = data.locations[0];
+    if (data) {
+      const { coords, timestamp } = data.locations[0];
 
-    const currentLocation = {
-      latitude: coords.latitude,
-      longitude: coords.longitude,
-      timestamp,
-    };
+      const currentLocation = {
+        latitude: coords.latitude,
+        longitude: coords.longitude,
+        timestamp,
+      };
 
-    console.log({ currentLocation });
+      setLocation(currentLocation);
+    }
   } catch (error) {
     console.log(error);
+    await stopLocationTask();
   }
 });
 
-export const startLocationTast = async () => {
+export const startLocationTask = async () => {
   try {
     const hasStarted = await hasStartedLocationUpdatesAsync(LOCATION_TASK_NAME);
 

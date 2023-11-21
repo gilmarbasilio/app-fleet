@@ -23,7 +23,7 @@ const HeaderRegisterCar = ({ title }: HeaderRegisterCarProps) => {
   const setMessageToast = useToastStore((state) => state.setMessage);
   const insets = useSafeAreaInsets();
 
-  const paddingTop = insets.top;
+  const paddingTop = insets.top + 16;
 
   return (
     <S.Container style={{ paddingTop }}>
