@@ -7,6 +7,10 @@ import { PrivateStackParamList } from "../../../../routes/private.routes";
 import { useToastStore } from "../../../../shared/store/useToastStore";
 import { useAuthStore } from "../../../../shared/store/useAuthStore";
 import theme from "../../../../shared/theme";
+import { useEffect, useState } from "react";
+import { getCarInUseService } from "../../../../shared/services/histories.service";
+import { Historic } from "../../../../shared/models/historic.model";
+import { Loading } from "../../../../shared/components/Loading";
 
 type HomeScreenProps = NativeStackNavigationProp<
   PrivateStackParamList,
@@ -15,28 +19,82 @@ type HomeScreenProps = NativeStackNavigationProp<
 
 const RegisterUseCar = () => {
   const { navigate } = useNavigation<HomeScreenProps>();
-  const setMessageToast = useToastStore((state) => state.setMessage);
-  const user = useAuthStore((state) => state.user);
-  const setToken = useAuthStore((state) => state.setToken);
-  const setUser = useAuthStore((state) => state.setUser);
+  const [historic, setHistoric] = useState<Historic | null>();
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const handleRegisterCar = async () => {
-    console.log("handleRegisterCar");
-    navigate("RegisterCarScreen");
+    if (historic) {
+      navigate("CarCheckOutScreen", {
+        id: historic.id,
+      });
+    } else {
+      navigate("RegisterCarScreen");
+    }
   };
+
+  const handleGetCarInUse = async () => {
+    try {
+      const response = await getCarInUseService();
+      console.log({ response });
+      setHistoric(response);
+      setIsLoading(false);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    handleGetCarInUse();
+  }, []);
 
   return (
     <S.Container>
       <S.CarInfo onPress={handleRegisterCar}>
-        <S.CarIcon>
-          <FontAwesome5 name="key" size={40} color={theme.colors.brand_light} />
-        </S.CarIcon>
-        <S.CarDescription>
-          <S.CarText>
-            Nenhum veículo em uso...{" "}
-            <S.CarTextBold>Clique aqui para registrar a saída.</S.CarTextBold>
-          </S.CarText>
-        </S.CarDescription>
+        {isLoading ? (
+          <Loading />
+        ) : (
+          <>
+            {historic ? (
+              <>
+                <S.CarIcon>
+                  <FontAwesome5
+                    name="car"
+                    size={40}
+                    color={theme.colors.brand_light}
+                  />
+                </S.CarIcon>
+                <S.CarDescription>
+                  <S.CarText>
+                    Veículo{" "}
+                    <S.CarTextBold>{historic.licensePlate}</S.CarTextBold> em
+                    uso.{" "}
+                    <S.CarTextBold>
+                      Clique aqui para registrar a chegada.
+                    </S.CarTextBold>
+                  </S.CarText>
+                </S.CarDescription>
+              </>
+            ) : (
+              <>
+                <S.CarIcon>
+                  <FontAwesome5
+                    name="key"
+                    size={40}
+                    color={theme.colors.brand_light}
+                  />
+                </S.CarIcon>
+                <S.CarDescription>
+                  <S.CarText>
+                    Nenhum veículo em uso...{" "}
+                    <S.CarTextBold>
+                      Clique aqui para registrar a saída.
+                    </S.CarTextBold>
+                  </S.CarText>
+                </S.CarDescription>
+              </>
+            )}
+          </>
+        )}
       </S.CarInfo>
     </S.Container>
   );

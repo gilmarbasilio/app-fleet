@@ -7,7 +7,7 @@ import {
 import * as TaskManager from "expo-task-manager";
 import { useLocationStore } from "../store/uselocationStorage";
 
-export const LOCATION_TASK_NAME = "locatio-tracking";
+export const LOCATION_TASK_NAME = "location-tracking";
 
 TaskManager.defineTask(LOCATION_TASK_NAME, async ({ data, error }: any) => {
   const setLocation = useLocationStore((state) => state.setLocation);
