@@ -1,6 +1,6 @@
 import * as S from "./styles";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { useNavigation } from "@react-navigation/native";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
 import { Alert } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { PrivateStackParamList } from "../../../../routes/private.routes";
@@ -21,6 +21,7 @@ const RegisterUseCar = () => {
   const { navigate } = useNavigation<HomeScreenProps>();
   const [historic, setHistoric] = useState<Historic | null>();
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const isFocused = useIsFocused();
 
   const handleRegisterCar = async () => {
     if (historic) {
@@ -34,18 +35,19 @@ const RegisterUseCar = () => {
 
   const handleGetCarInUse = async () => {
     try {
+      setIsLoading(true);
       const response = await getCarInUseService();
-      console.log({ response });
       setHistoric(response);
-      setIsLoading(false);
     } catch (error) {
       console.error(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   useEffect(() => {
     handleGetCarInUse();
-  }, []);
+  }, [isFocused]);
 
   return (
     <S.Container>

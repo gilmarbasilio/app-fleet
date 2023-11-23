@@ -1,5 +1,6 @@
 import { SafeAreaView } from "react-native-safe-area-context";
 import styled from "styled-components/native";
+import { Loading } from "../../../../shared/components/Loading";
 
 export const Container = styled.View`
   gap: 10px;
@@ -31,4 +32,13 @@ export const CarIcon = styled.View`
   border-radius: 6px;
   justify-content: center;
   align-items: center;
+`;
+
+export const LoadingContainer = styled.View`
+  flex: none;
+  align-items: center;
+  justify-content: start;
+  height: 60px;
+  padding: 10px 0;
+  background-color: ${({ theme }) => theme.colors.gray_800};
 `;

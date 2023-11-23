@@ -51,6 +51,7 @@ const RegisterCarScreen = () => {
   const { navigate } = useNavigation<RegisterCarScreenProps>();
   const setMessageToast = useToastStore((state) => state.setMessage);
   const [isLoadingLocation, setIsLoadingLocation] = useState(true);
+  const [isLoadingForm, setisLoadingForm] = useState(false);
   const [currentAddress, setCurrentAddress] = useState<string | null>(null);
   const [currentCoords, setCurrentCoords] =
     useState<LocationObjectCoords | null>(null);
@@ -116,33 +117,32 @@ const RegisterCarScreen = () => {
   }
 
   const handleDepartureRegister = async (data: RegisterCarUseSchema) => {
-    const backgroundPermissions = await requestBackgroundPermissionsAsync();
-    console.log({ backgroundPermissions });
-    if (!backgroundPermissions.granted) {
-      return Alert.alert(
-        "Localização",
-        'É necessário permitir que o App tenhar acesso a localização em segundo plano. Acesse as configurações do dispositivo e habilite "Permitir o tempo todo".'
-      );
+    try {
+      setisLoadingForm(true);
+
+      const backgroundPermissions = await requestBackgroundPermissionsAsync();
+      console.log({ backgroundPermissions });
+      if (!backgroundPermissions.granted) {
+        return Alert.alert(
+          "Localização",
+          'É necessário permitir que o App tenhar acesso a localização em segundo plano. Acesse as configurações do dispositivo e habilite "Permitir o tempo todo".'
+        );
+      }
+
+      await createHistoricService({
+        licensePlate: data.plate,
+        description: data.justification,
+      });
+
+      await startLocationTask();
+
+      navigate("HomeScreen");
+    } catch (error: any) {
+      return Alert.alert("Ocorreu um problema", error?.message);
+    } finally {
+      setisLoadingForm(false);
     }
-
-    await createHistoricService({
-      licensePlate: data.plate,
-      description: data.justification,
-      coords: [
-        {
-          latitude: Number(currentCoords?.latitude),
-          longitude: Number(currentCoords?.longitude),
-          timestamp: new Date().getTime(),
-        },
-      ],
-    });
-
-    await startLocationTask();
-
-    navigate("HomeScreen");
   };
-
-  console.log({ errors });
 
   return (
     <S.Container>
@@ -174,6 +174,7 @@ const RegisterCarScreen = () => {
           <S.ButtonRegisterOutput
             title="Registrar Saída"
             onPress={handleSubmit(handleDepartureRegister)}
+            isLoading={isLoadingForm}
           />
         </S.FormContainer>
       </ScrollView>

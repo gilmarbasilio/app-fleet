@@ -7,15 +7,8 @@ export const Container = styled.View`
   background-color: ${({ theme }) => theme.colors.black_700};
 `;
 
-export const FormContainer = styled.View`
-  flex: 1;
-  gap: 16px;
-  padding: 0 32px;
-  margin-top: 32px;
-`;
-
 export const ButtonRegisterOutput = styled(Button)`
-  margin-top: 20px;
+  margin-top: 30px;
 `;
 
 export const Message = styled.Text`
@@ -23,4 +16,34 @@ export const Message = styled.Text`
   font-family: ${({ theme }) => theme.font_family.regular};
   text-align: center;
   margin: 24px;
+`;
+
+////////////////
+
+export const Content = styled.View`
+  flex-grow: 1;
+  padding: 32px;
+  gap: 10px;
+`;
+
+export const Label = styled.Text`
+  color: ${({ theme }) => theme.colors.gray_300};
+  font-size: ${({ theme }) => theme.font_size.sm}px;
+  font-family: ${({ theme }) => theme.font_family.regular};
+
+  margin-top: 32px;
+  margin-bottom: 5px;
+`;
+
+export const LicensePlate = styled.Text`
+  color: ${({ theme }) => theme.colors.gray_100};
+  font-size: ${({ theme }) => theme.font_size.xxxl}px;
+  font-family: ${({ theme }) => theme.font_family.bold};
+`;
+
+export const Description = styled.Text`
+  color: ${({ theme }) => theme.colors.gray_100};
+  font-size: ${({ theme }) => theme.font_size.md}px;
+  font-family: ${({ theme }) => theme.font_family.regular};
+  text-align: justify;
 `;

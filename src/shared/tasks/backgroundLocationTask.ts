@@ -5,13 +5,14 @@ import {
   stopLocationUpdatesAsync,
 } from "expo-location";
 import * as TaskManager from "expo-task-manager";
-import { useLocationStore } from "../store/uselocationStorage";
+import {
+  removeStorageLocations,
+  saveStorageLocation,
+} from "../storage/locationStorage";
 
 export const LOCATION_TASK_NAME = "location-tracking";
 
 TaskManager.defineTask(LOCATION_TASK_NAME, async ({ data, error }: any) => {
-  const setLocation = useLocationStore((state) => state.setLocation);
-
   try {
     if (error) {
       throw error;
@@ -26,7 +27,7 @@ TaskManager.defineTask(LOCATION_TASK_NAME, async ({ data, error }: any) => {
         timestamp,
       };
 
-      setLocation(currentLocation);
+      await saveStorageLocation(currentLocation);
     }
   } catch (error) {
     console.log(error);
@@ -45,7 +46,7 @@ export const startLocationTask = async () => {
     await startLocationUpdatesAsync(LOCATION_TASK_NAME, {
       accuracy: Accuracy.Highest,
       distanceInterval: 1,
-      timeInterval: 1000,
+      timeInterval: 10000,
     });
   } catch (error) {
     console.log(error);
@@ -57,6 +58,7 @@ export const stopLocationTask = async () => {
     const hasStarted = await hasStartedLocationUpdatesAsync(LOCATION_TASK_NAME);
     if (hasStarted) {
       await stopLocationUpdatesAsync(LOCATION_TASK_NAME);
+      await removeStorageLocations();
     }
   } catch (error) {
     console.log(error);

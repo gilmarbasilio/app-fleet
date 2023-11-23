@@ -27,9 +27,17 @@ import { getAddressLocation } from "../../../../shared/utils/getAddressLocation"
 import { Loading } from "../../../../shared/components/Loading";
 import LocationInfo from "../../components/LocationInfo";
 import Map from "../../../../shared/components/Map";
-import { startLocationTask } from "../../../../shared/tasks/backgroundLocationTask";
-import { getHistoricByIdService } from "../../../../shared/services/histories.service";
+import {
+  startLocationTask,
+  stopLocationTask,
+} from "../../../../shared/tasks/backgroundLocationTask";
+import {
+  checkOutHistoricService,
+  getHistoricByIdService,
+} from "../../../../shared/services/histories.service";
 import { Historic } from "../../../../shared/models/historic.model";
+import { getStorageLocations } from "../../../../shared/storage/locationStorage";
+import { LatLng } from "react-native-maps";
 
 const registerCarUseSchema = z.object({
   plate: z
@@ -58,29 +66,27 @@ const CarCheckOutScreen = ({
 }: CarCheckOutScreenProps) => {
   const setMessageToast = useToastStore((state) => state.setMessage);
   const [isLoadingLocation, setIsLoadingLocation] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [currentAddress, setCurrentAddress] = useState<string | null>(null);
-  const [currentCoords, setCurrentCoords] =
-    useState<LocationObjectCoords | null>(null);
+  const { goBack } = useNavigation();
   const [historic, setHistoric] = useState<Historic>();
-
-  const [locationForegroundPermission, requestLocationForegroundPermission] =
-    useForegroundPermissions();
-
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<CarCheckOutScreenSchema>({
-    resolver: zodResolver(registerCarUseSchema),
-  });
+  const [coordinates, setCoordinates] = useState<LatLng[]>([]);
 
   const getHistoricInfo = async () => {
     try {
       const response = await getHistoricByIdService(id);
+      const locationStorage = await getStorageLocations();
+
       setHistoric(response);
-      setIsLoadingLocation(false);
-    } catch (error) {
+      setCoordinates(locationStorage);
+    } catch (error: any) {
       console.log(error);
+      setMessageToast({
+        text: error?.message,
+        type: "danger",
+      });
+    } finally {
+      setIsLoadingLocation(false);
     }
   };
 
@@ -88,74 +94,55 @@ const CarCheckOutScreen = ({
     getHistoricInfo();
   }, [id]);
 
-  useEffect(() => {
-    if (!locationForegroundPermission?.granted) {
-      return;
-    }
-
-    let subscription: LocationSubscription;
-
-    watchPositionAsync(
-      {
-        accuracy: LocationAccuracy.High,
-        timeInterval: 1000,
-      },
-      (location) => {
-        console.log(location);
-        setCurrentCoords(location.coords);
-        getAddressLocation(location.coords)
-          .then((address) => {
-            if (address) {
-              setCurrentAddress(address);
-            }
-          })
-          .finally(() => setIsLoadingLocation(false));
-      }
-    ).then((response) => (subscription = response));
-
-    return () => subscription.remove();
-  }, [locationForegroundPermission?.granted]);
-
-  if (!locationForegroundPermission?.granted) {
-    return (
-      <S.Container>
-        <HeaderRegisterCar title="Saída" />
-        <S.Message>
-          Você precisa permitir que o aplicativo tenha acesso a localização para
-          acessar essa funcionalidade. Por favor, acesse as configurações do seu
-          dispositivo para conceder a permissão ao aplicativo.
-        </S.Message>
-      </S.Container>
-    );
-  }
-
-  console.log({ historic });
-
   if (isLoadingLocation) {
     return <Loading />;
   }
 
-  const handleDepartureRegister = async (data: CarCheckOutScreenSchema) => {
-    const backgroundPermissions = await requestBackgroundPermissionsAsync();
-    console.log({ backgroundPermissions });
-    if (!backgroundPermissions.granted) {
-      return Alert.alert(
-        "Localização",
-        'É necessário permitir que o App tenhar acesso a localização em segundo plano. Acesse as configurações do dispositivo e habilite "Permitir o tempo todo".'
-      );
+  const handleCheckOutRegister = async () => {
+    try {
+      console.log("passou aqui 1");
+      setIsLoading(true);
+      if (!historic) {
+        return setMessageToast({
+          text: "Não foi possível obter os dados para registrar a chegada do veículo.",
+          type: "danger",
+        });
+      }
+
+      console.log("passou aqui 2");
+
+      const locations = await getStorageLocations();
+      console.log("passou aqui 3");
+      await checkOutHistoricService({
+        id: historic.id,
+        coords: locations,
+      });
+
+      await stopLocationTask();
+
+      setMessageToast({
+        text: "Chegada registrada com sucesso.",
+        type: "success",
+      });
+
+      goBack();
+    } catch (error: any) {
+      setMessageToast({
+        text:
+          error?.message || "Não foi possível registar a chegada do veículo.",
+        type: "danger",
+      });
+    } finally {
+      setIsLoading(false);
     }
-
-    await startLocationTask();
   };
-
-  ////////////////////////////////////////////////////////////////
 
   return (
     <S.Container>
       <HeaderRegisterCar title="Chegada" />
       <ScrollView>
-        {currentCoords && <Map coordinates={[currentCoords]} />}
-        <S.FormContainer>
+        {coordinates.length > 0 && <Map coordinates={coordinates} />}
+        <S.Content>
           {currentAddress && (
             <LocationInfo
               icon={{
@@ -167,21 +154,20 @@ const CarCheckOutScreen = ({
             />
           )}
 
-          <LicensePlateInput
-            control={control}
-            label="Placa do veículo"
-            placeholder="XXX-0000"
-          />
-          <JustificationInput
-            control={control}
-            label="Finalidade"
-            placeholder="Vou utilizar o carro para..."
-          />
+          <S.Label>Placa do veículo</S.Label>
+
+          <S.LicensePlate>{historic?.licensePlate}</S.LicensePlate>
+
+          <S.Label>Finalidade</S.Label>
+
+          <S.Description>{historic?.description}</S.Description>
+
           <S.ButtonRegisterOutput
             title="Registrar Chegada"
-            onPress={handleSubmit(handleDepartureRegister)}
+            onPress={handleCheckOutRegister}
+            isLoading={isLoading}
           />
-        </S.FormContainer>
+        </S.Content>
       </ScrollView>
     </S.Container>
   );

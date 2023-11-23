@@ -1,8 +1,8 @@
 import * as S from "./styles";
 
-export const Loading = () => {
+export const Loading = (props: any) => {
   return (
-    <S.Container>
+    <S.Container {...props}>
       <S.LoadIndicator />
     </S.Container>
   );

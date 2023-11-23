@@ -1,4 +1,5 @@
 import axios from "axios";
+import queryString from "query-string";
 import api from "../../config/api";
 import { Coords, Historic } from "../models/historic.model";
 
@@ -41,7 +42,7 @@ export const getHistoricByIdService = async (
 export interface ICreateHistoricServiceRequest {
   licensePlate: string;
   description: string;
-  coords: Coords[];
+  coords?: Coords[];
 }
 
 export interface ICreateHistoricServiceResponse {}
@@ -57,6 +58,57 @@ export const createHistoricService = async (
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
+      throw new Error(error.response?.data?.message);
+    }
+    throw error;
+  }
+};
+
+export interface ICheckOutHistoricServiceRequest {
+  id: string;
+  coords: Coords[];
+}
+
+export interface ICheckOutHistoricServiceResponse {}
+
+export const checkOutHistoricService = async (
+  data: ICheckOutHistoricServiceRequest
+): Promise<ICheckOutHistoricServiceResponse> => {
+  try {
+    const response = await api.post<ICheckOutHistoricServiceResponse>(
+      `/histories/check-out`,
+      data
+    );
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.log(error.response);
+      throw new Error(error.response?.data?.message);
+    }
+    throw error;
+  }
+};
+
+export interface IGetCarInUseServiceRequest {
+  skip?: number;
+  take?: number;
+  status?: "departed" | "arrived";
+}
+
+export interface IGetCarInUseServiceResponse extends Historic {}
+
+export const getListHistoriesService = async (
+  data: IGetCarInUseServiceRequest
+): Promise<IGetCarInUseServiceResponse[]> => {
+  try {
+    const stringified = queryString.stringify(data);
+    const response = await api.get<IGetCarInUseServiceResponse[]>(
+      `/histories?${stringified}`
+    );
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.log("headers:", error.request);
       throw new Error(error.response?.data?.message);
     }
     throw error;
