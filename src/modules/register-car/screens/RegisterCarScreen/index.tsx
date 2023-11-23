@@ -25,6 +25,7 @@ import { Loading } from "../../../../shared/components/Loading";
 import LocationInfo from "../../components/LocationInfo";
 import Map from "../../../../shared/components/Map";
 import { startLocationTask } from "../../../../shared/tasks/backgroundLocationTask";
+import { createHistoricService } from "../../../../shared/services/histories.service";
 
 const registerCarUseSchema = z.object({
   plate: z
@@ -124,7 +125,21 @@ const RegisterCarScreen = () => {
       );
     }
 
+    await createHistoricService({
+      licensePlate: data.plate,
+      description: data.justification,
+      coords: [
+        {
+          latitude: Number(currentCoords?.latitude),
+          longitude: Number(currentCoords?.longitude),
+          timestamp: new Date().getTime(),
+        },
+      ],
+    });
+
     await startLocationTask();
+
+    navigate("HomeScreen");
   };
 
   console.log({ errors });
