@@ -42,19 +42,18 @@ const registerCarUseSchema = z.object({
 
 type RegisterCarUseSchema = z.infer<typeof registerCarUseSchema>;
 
-type RegisterCarScreenProps = NativeStackNavigationProp<
+type CheckInScreenProps = NativeStackNavigationProp<
   PrivateStackParamList,
-  "RegisterCarScreen"
+  "CheckInScreen"
 >;
 
-const RegisterCarScreen = () => {
-  const { navigate } = useNavigation<RegisterCarScreenProps>();
+const CheckInScreen = () => {
+  const { navigate } = useNavigation<CheckInScreenProps>();
   const setMessageToast = useToastStore((state) => state.setMessage);
   const [isLoadingLocation, setIsLoadingLocation] = useState(true);
   const [isLoadingForm, setisLoadingForm] = useState(false);
-  const [currentAddress, setCurrentAddress] = useState<string | null>(null);
-  const [currentCoords, setCurrentCoords] =
-    useState<LocationObjectCoords | null>(null);
+  const [currentAddress, setCurrentAddress] = useState<string>();
+  const [currentCoords, setCurrentCoords] = useState<LocationObjectCoords>();
 
   const [locationForegroundPermission, requestLocationForegroundPermission] =
     useForegroundPermissions();
@@ -84,7 +83,6 @@ const RegisterCarScreen = () => {
         timeInterval: 1000,
       },
       (location) => {
-        console.log(location);
         setCurrentCoords(location.coords);
         getAddressLocation(location.coords)
           .then((address) => {
@@ -121,7 +119,6 @@ const RegisterCarScreen = () => {
       setisLoadingForm(true);
 
       const backgroundPermissions = await requestBackgroundPermissionsAsync();
-      console.log({ backgroundPermissions });
       if (!backgroundPermissions.granted) {
         return Alert.alert(
           "Localização",
@@ -132,13 +129,23 @@ const RegisterCarScreen = () => {
       await createHistoricService({
         licensePlate: data.plate,
         description: data.justification,
+        coords: [
+          {
+            latitude: Number(currentCoords?.latitude),
+            longitude: Number(currentCoords?.longitude),
+            timestamp: new Date().getTime(),
+          },
+        ],
       });
 
       await startLocationTask();
 
       navigate("HomeScreen");
     } catch (error: any) {
-      return Alert.alert("Ocorreu um problema", error?.message);
+      setMessageToast({
+        text: error?.message,
+        type: "danger",
+      });
     } finally {
       setisLoadingForm(false);
     }
@@ -182,4 +189,4 @@ const RegisterCarScreen = () => {
   );
 };
 
-export default RegisterCarScreen;
+export default CheckInScreen;

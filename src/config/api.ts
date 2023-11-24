@@ -1,15 +1,23 @@
-import axios, { AxiosInstance } from "axios";
-import { useAuthStore } from "../shared/store/useAuthStore";
+import axios from "axios";
+import { getAuthTokenStorage } from "../shared/storage/authToken.storage";
 
 const api = axios.create({
   baseURL: process.env.EXPO_PUBLIC_API_URL,
 });
 
-export default api;
+api.interceptors.request.use(
+  async (config) => {
+    const token = await getAuthTokenStorage();
 
-export const addAccessTokenOnRequest = async (
-  _api: AxiosInstance
-): Promise<void> => {
-  const token = useAuthStore((state) => state.token);
-  _api.defaults.headers.Authorization = `Bearer ${token}`;
-};
+    if (!config.headers.Authorization && token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+export default api;

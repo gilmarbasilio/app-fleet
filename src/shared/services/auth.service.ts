@@ -1,5 +1,5 @@
 import axios from "axios";
-import api, { addAccessTokenOnRequest } from "../../config/api";
+import api from "../../config/api";
 
 export interface ILoginServiceRequest {
   email: string;
@@ -50,6 +50,7 @@ export interface IUserLoggedServiceResponse {
   id: string;
   name: string;
   email: string;
+  photo: string;
 }
 
 export const getUserLoggedService =

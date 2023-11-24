@@ -30,7 +30,6 @@ TaskManager.defineTask(LOCATION_TASK_NAME, async ({ data, error }: any) => {
       await saveStorageLocation(currentLocation);
     }
   } catch (error) {
-    console.log(error);
     await stopLocationTask();
   }
 });
@@ -49,7 +48,7 @@ export const startLocationTask = async () => {
       timeInterval: 10000,
     });
   } catch (error) {
-    console.log(error);
+    throw error;
   }
 };
 
@@ -61,6 +60,6 @@ export const stopLocationTask = async () => {
       await removeStorageLocations();
     }
   } catch (error) {
-    console.log(error);
+    throw error;
   }
 };

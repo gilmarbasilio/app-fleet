@@ -14,14 +14,15 @@ export const getCarInUseService =
       return response.data;
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        console.log("headers:", error.request);
         throw new Error(error.response?.data?.message);
       }
       throw error;
     }
   };
 
-export interface IGetHistoricByIdServiceResponse extends Historic {}
+export interface IGetHistoricByIdServiceResponse extends Historic {
+  coords: Coords[];
+}
 
 export const getHistoricByIdService = async (
   id: string
@@ -82,7 +83,6 @@ export const checkOutHistoricService = async (
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      console.log(error.response);
       throw new Error(error.response?.data?.message);
     }
     throw error;
@@ -108,7 +108,6 @@ export const getListHistoriesService = async (
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      console.log("headers:", error.request);
       throw new Error(error.response?.data?.message);
     }
     throw error;

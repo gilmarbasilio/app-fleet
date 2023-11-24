@@ -1,5 +1,6 @@
 import { SafeAreaView } from "react-native-safe-area-context";
 import styled from "styled-components/native";
+import { Loading } from "../../../../shared/components/Loading";
 
 export const Container = styled.View`
   flex-direction: row;
@@ -15,9 +16,35 @@ export const UserInfo = styled.View`
   align-items: center;
 `;
 
+export const UserInfoAvatarContainer = styled.View`
+  width: 55px;
+  height: 55px;
+  position: relative;
+`;
+
 export const UserInfoAvatar = styled.Image`
   width: 55px;
   height: 55px;
+  border-radius: 6px;
+`;
+
+export const UserChangeAvatar = styled.TouchableOpacity`
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background-color: ${({ theme }) => theme.colors.white};
+  border-radius: 25px;
+  align-items: center;
+  justify-content: center;
+  bottom: -5px;
+  right: -5px;
+`;
+
+export const LoadingAvatar = styled(Loading)`
+  width: 55px;
+  height: 55px;
+  flex: none;
+  border-radius: 6px;
 `;
 
 export const UserInfoDetails = styled.View``;

@@ -73,6 +73,7 @@ const LoginScreen = () => {
       setUser({
         id: userLogged.id,
         name: userLogged.name,
+        photo: userLogged.photo,
       });
     } catch (error: any) {
       setMessageToast({

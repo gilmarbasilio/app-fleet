@@ -10,7 +10,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 type HeaderRegisterCarNavigationProps = NativeStackNavigationProp<
   PrivateStackParamList,
-  "RegisterCarScreen"
+  "CheckInScreen"
 >;
 
 type HeaderRegisterCarProps = {

@@ -12,7 +12,7 @@ import { IconBoxFamily } from "../IconBox/types";
 
 type LocationInfoNavigationProps = NativeStackNavigationProp<
   PrivateStackParamList,
-  "RegisterCarScreen"
+  "CheckInScreen"
 >;
 
 export type LocationInfoProps = {

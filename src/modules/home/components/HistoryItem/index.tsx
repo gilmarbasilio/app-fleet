@@ -27,13 +27,11 @@ type HomeScreenProps = NativeStackNavigationProp<
 
 const HistoryItem = ({ item }: HistoryItemProps) => {
   const { navigate } = useNavigation<HomeScreenProps>();
-  const setMessageToast = useToastStore((state) => state.setMessage);
-  const user = useAuthStore((state) => state.user);
-  const setToken = useAuthStore((state) => state.setToken);
-  const setUser = useAuthStore((state) => state.setUser);
 
   const handleShowHistory = async () => {
-    console.log("handleShowHistory");
+    navigate("HistoricDetailScreen", {
+      id: item.id,
+    });
   };
 
   return (

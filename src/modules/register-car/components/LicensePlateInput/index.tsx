@@ -11,7 +11,7 @@ import { Control } from "react-hook-form";
 
 type LicensePlateInputNavigationProps = NativeStackNavigationProp<
   PrivateStackParamList,
-  "RegisterCarScreen"
+  "CheckInScreen"
 >;
 
 type LicensePlateInputProps = {

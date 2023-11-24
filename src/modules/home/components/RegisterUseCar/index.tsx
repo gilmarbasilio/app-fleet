@@ -25,11 +25,11 @@ const RegisterUseCar = () => {
 
   const handleRegisterCar = async () => {
     if (historic) {
-      navigate("CarCheckOutScreen", {
+      navigate("CheckOutScreen", {
         id: historic.id,
       });
     } else {
-      navigate("RegisterCarScreen");
+      navigate("CheckInScreen");
     }
   };
 

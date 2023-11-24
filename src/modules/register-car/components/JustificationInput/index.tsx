@@ -11,7 +11,7 @@ import { Control } from "react-hook-form";
 
 type JustificationInputNavigationProps = NativeStackNavigationProp<
   PrivateStackParamList,
-  "RegisterCarScreen"
+  "CheckInScreen"
 >;
 
 type JustificationInputProps = {

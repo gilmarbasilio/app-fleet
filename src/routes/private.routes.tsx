@@ -1,14 +1,18 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import RegisterCarScreen from "../modules/register-car/screens/RegisterCarScreen";
 import HomeScreen from "../modules/home/screens/HomeScreen";
-import CarCheckOutScreen from "../modules/register-car/screens/CarCheckOutScreen";
+import HistoricDetailScreen from "../modules/register-car/screens/HistoricDetailScreen";
+import CheckInScreen from "../modules/register-car/screens/CheckInScreen";
+import CheckOutScreen from "../modules/register-car/screens/CheckOutScreen";
 
 export type PrivateStackParamList = {
   HomeScreen: undefined;
-  RegisterCarScreen?: {
+  CheckInScreen?: {
     id?: string;
   };
-  CarCheckOutScreen: {
+  CheckOutScreen: {
+    id: string;
+  };
+  HistoricDetailScreen: {
     id: string;
   };
 };
@@ -24,8 +28,12 @@ const PrivateRoutes = () => {
       initialRouteName="HomeScreen"
     >
       <Stack.Screen name="HomeScreen" component={HomeScreen} />
-      <Stack.Screen name="RegisterCarScreen" component={RegisterCarScreen} />
-      <Stack.Screen name="CarCheckOutScreen" component={CarCheckOutScreen} />
+      <Stack.Screen name="CheckInScreen" component={CheckInScreen} />
+      <Stack.Screen name="CheckOutScreen" component={CheckOutScreen} />
+      <Stack.Screen
+        name="HistoricDetailScreen"
+        component={HistoricDetailScreen}
+      />
     </Stack.Navigator>
   );
 };
