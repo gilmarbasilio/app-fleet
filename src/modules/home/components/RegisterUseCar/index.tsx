@@ -1,16 +1,13 @@
 import * as S from "./styles";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useIsFocused, useNavigation } from "@react-navigation/native";
-import { Alert } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { PrivateStackParamList } from "../../../../routes/private.routes";
-import { useToastStore } from "../../../../shared/store/useToastStore";
-import { useAuthStore } from "../../../../shared/store/useAuthStore";
 import theme from "../../../../shared/theme";
 import { useEffect, useState } from "react";
-import { getCarInUseService } from "../../../../shared/services/histories.service";
-import { Historic } from "../../../../shared/models/historic.model";
 import { Loading } from "../../../../shared/components/Loading";
+import { Historic } from "../../../../shared/models/historicModel";
+import { getCarInUseService } from "../../../../shared/services/historiesService";
 
 type HomeScreenProps = NativeStackNavigationProp<
   PrivateStackParamList,
@@ -62,7 +59,7 @@ const RegisterUseCar = () => {
                   <FontAwesome5
                     name="car"
                     size={40}
-                    color={theme.colors.brand_light}
+                    color={theme.colors.brand}
                   />
                 </S.CarIcon>
                 <S.CarDescription>
@@ -82,7 +79,7 @@ const RegisterUseCar = () => {
                   <FontAwesome5
                     name="key"
                     size={40}
-                    color={theme.colors.brand_light}
+                    color={theme.colors.brand}
                   />
                 </S.CarIcon>
                 <S.CarDescription>

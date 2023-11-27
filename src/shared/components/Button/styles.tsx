@@ -13,11 +13,10 @@ export const Container = styled.TouchableOpacity<ContainerProps>`
   height: 56px;
   border-radius: 6px;
   border-width: 1px;
-  border-color: ${({ theme }) => theme.colors.brand_light};
+  border-color: ${({ theme }) => theme.colors.brand};
 
   ${(props) =>
-    props.type === "button" &&
-    `background-color: ${props.theme.colors.brand_light};`}
+    props.type === "button" && `background-color: ${props.theme.colors.brand};`}
 
   ${(props) =>
     props.type === "outlined" &&

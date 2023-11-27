@@ -1,6 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
-const STORAGE_KEY = "@myapp:location";
+import { STORAGE_KEY } from "../constants/storageConstants";
 
 type LocationProps = {
   latitude: number;

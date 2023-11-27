@@ -1,11 +1,13 @@
 import { SafeAreaView } from "react-native-safe-area-context";
 import styled from "styled-components/native";
 import { Loading } from "../../../../shared/components/Loading";
+import theme from "../../../../shared/theme";
 
 export const Container = styled.View`
   gap: 10px;
   padding: 0px 25px;
   flex: 1;
+  position: relative;
 `;
 
 export const Title = styled.Text`
@@ -34,11 +36,13 @@ export const CarIcon = styled.View`
   align-items: center;
 `;
 
-export const LoadingContainer = styled.View`
-  flex: none;
-  align-items: center;
-  justify-content: start;
-  height: 60px;
-  padding: 10px 0;
-  background-color: ${({ theme }) => theme.colors.gray_800};
+export const LoadingList = styled.ActivityIndicator.attrs({
+  size: 30,
+  color: theme.colors.brand,
+})`
+  position: absolute;
+  height: 77px;
+  bottom: 0;
+  left: 0;
+  right: 0;
 `;

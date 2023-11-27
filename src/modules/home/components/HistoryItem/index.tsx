@@ -1,13 +1,9 @@
 import * as S from "./styles";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useNavigation } from "@react-navigation/native";
-import { MaterialIcons } from "@expo/vector-icons";
-import { Alert, FlatList } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { format, parseISO } from "date-fns";
 import { PrivateStackParamList } from "../../../../routes/private.routes";
-import { useToastStore } from "../../../../shared/store/useToastStore";
-import { useAuthStore } from "../../../../shared/store/useAuthStore";
 import theme from "../../../../shared/theme";
 
 export type HistoryItemDetail = {
@@ -49,7 +45,7 @@ const HistoryItem = ({ item }: HistoryItemProps) => {
         <FontAwesome5
           name="chevron-right"
           size={24}
-          color={theme.colors.brand_light}
+          color={theme.colors.brand}
         />
       </S.ItemButton>
     </S.Container>

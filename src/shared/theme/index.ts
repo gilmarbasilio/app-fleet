@@ -2,8 +2,7 @@ const theme = {
   colors: {
     white: "#FFFFFF",
 
-    brand_light: "#DB0000",
-    brand_mid: "#00875F",
+    brand: "#DB0000",
 
     gray_100: "#E1E1E6",
     gray_200: "#C4C4CC",

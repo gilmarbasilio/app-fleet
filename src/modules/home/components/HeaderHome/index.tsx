@@ -4,14 +4,11 @@ import { Alert } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { useToastStore } from "../../../../shared/store/useToastStore";
 import { useAuthStore } from "../../../../shared/store/useAuthStore";
-import theme from "../../../../shared/theme";
-import { updateUserPhoto } from "../../../../shared/services/user.service";
 import { useState } from "react";
 import avatarDefault from "../../../../shared/assets/images/avatar-default.jpg";
-import { Loading } from "../../../../shared/components/Loading";
-import IconBox from "../../../register-car/components/IconBox";
 import { FontAwesome } from "@expo/vector-icons";
 import { useTheme } from "styled-components/native";
+import { updateUserPhoto } from "../../../../shared/services/userService";
 
 const HeaderHome = () => {
   const setMessageToast = useToastStore((state) => state.setMessage);
@@ -98,11 +95,7 @@ const HeaderHome = () => {
               }
             />
             <S.UserChangeAvatar onPress={handlePickImage}>
-              <FontAwesome
-                name="pencil"
-                size={14}
-                color={theme.colors.brand_light}
-              />
+              <FontAwesome name="pencil" size={14} color={theme.colors.brand} />
             </S.UserChangeAvatar>
           </S.UserInfoAvatarContainer>
         )}

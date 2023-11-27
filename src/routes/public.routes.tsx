@@ -7,7 +7,7 @@ export type PublicStackParamList = {
   CreateAccountScreen: undefined;
 };
 
-const Stack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator<PublicStackParamList>();
 
 const PublicRoutes = () => {
   return (

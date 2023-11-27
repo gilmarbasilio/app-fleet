@@ -1,17 +1,10 @@
 import * as S from "./styles";
 import { useToastStore } from "../../../../shared/store/useToastStore";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { useIsFocused, useNavigation } from "@react-navigation/native";
-import { PrivateStackParamList } from "../../../../routes/private.routes";
-import { MaterialIcons } from "@expo/vector-icons";
-import theme from "../../../../shared/theme";
-import { useAuthStore } from "../../../../shared/store/useAuthStore";
-import { Alert, FlatList, RefreshControl } from "react-native";
-import { FontAwesome5 } from "@expo/vector-icons";
+import { useIsFocused } from "@react-navigation/native";
+import { FlatList } from "react-native";
 import HistoryItem, { HistoryItemDetail } from "../HistoryItem";
-import { useCallback, useEffect, useState } from "react";
-import { getListHistoriesService } from "../../../../shared/services/histories.service";
-import { Loading } from "../../../../shared/components/Loading";
+import { useEffect, useState } from "react";
+import { getListHistoriesService } from "../../../../shared/services/historiesService";
 
 const HistoryUseCar = () => {
   const setMessageToast = useToastStore((state) => state.setMessage);
@@ -70,13 +63,8 @@ const HistoryUseCar = () => {
         showsVerticalScrollIndicator={false}
         onEndReachedThreshold={0.2}
         onEndReached={handleMoreData}
-        refreshControl={
-          <RefreshControl
-            refreshing={isLoading}
-            onRefresh={handleGetCarInUse}
-          />
-        }
       />
+      {isLoading && <S.LoadingList />}
     </S.Container>
   );
 };

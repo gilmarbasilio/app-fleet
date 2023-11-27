@@ -9,8 +9,8 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useNavigation } from "@react-navigation/native";
 import { PublicStackParamList } from "../../../../routes/public.routes";
 import { useToastStore } from "../../../../shared/store/useToastStore";
-import { registerService } from "../../../../shared/services/auth.service";
 import { TextInputForm } from "../../../../shared/components/TextInputForm";
+import { registerService } from "../../../../shared/services/authService";
 const registerSchema = z
   .object({
     name: z

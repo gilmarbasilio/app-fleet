@@ -4,7 +4,7 @@ import MapView, {
   Marker,
   Polyline,
 } from "react-native-maps";
-import IconBox from "../../../modules/register-car/components/IconBox";
+import IconBox from "../../../modules/register/components/IconBox";
 import { useRef } from "react";
 import { useTheme } from "styled-components/native";
 

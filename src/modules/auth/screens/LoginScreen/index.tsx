@@ -10,12 +10,11 @@ import { useNavigation } from "@react-navigation/native";
 import { PublicStackParamList } from "../../../../routes/public.routes";
 import { useToastStore } from "../../../../shared/store/useToastStore";
 import { useAuthStore } from "../../../../shared/store/useAuthStore";
+import { TextInputForm } from "../../../../shared/components/TextInputForm";
 import {
   getUserLoggedService,
   loginService,
-} from "../../../../shared/services/auth.service";
-import api from "../../../../config/api";
-import { TextInputForm } from "../../../../shared/components/TextInputForm";
+} from "../../../../shared/services/authService";
 
 const loginSchema = z.object({
   email: z
@@ -66,7 +65,7 @@ const LoginScreen = () => {
 
       setToken(response.token);
 
-      api.defaults.headers.Authorization = `Bearer ${response.token}`;
+      // api.defaults.headers.Authorization = `Bearer ${response.token}`;
 
       const userLogged = await getUserLoggedService();
 
