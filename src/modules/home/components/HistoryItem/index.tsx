@@ -1,7 +1,7 @@
 import * as S from "./styles";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useNavigation } from "@react-navigation/native";
-import { FontAwesome5 } from "@expo/vector-icons";
+import { FontAwesome } from "@expo/vector-icons";
 import { format, parseISO } from "date-fns";
 import { PrivateStackParamList } from "../../../../routes/private.routes";
 import theme from "../../../../shared/theme";
@@ -42,7 +42,7 @@ const HistoryItem = ({ item }: HistoryItemProps) => {
         </S.Description>
       </S.ItemContainer>
       <S.ItemButton>
-        <FontAwesome5
+        <FontAwesome
           name="chevron-right"
           size={24}
           color={theme.colors.brand}

@@ -1,6 +1,4 @@
-import { SafeAreaView } from "react-native-safe-area-context";
 import styled from "styled-components/native";
-import { Loading } from "../../../../shared/components/Loading";
 import theme from "../../../../shared/theme";
 
 export const Container = styled.View`
@@ -42,7 +40,7 @@ export const LoadingList = styled.ActivityIndicator.attrs({
 })`
   position: absolute;
   height: 77px;
-  bottom: 0;
+  top: 20px;
   left: 0;
   right: 0;
 `;

@@ -12,7 +12,7 @@ const HistoryUseCar = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [listHistoric, setListHistoric] = useState<HistoryItemDetail[]>([]);
   const [skip, setSkip] = useState<number>(0);
-  const [take, setTake] = useState<number>(6);
+  const [take] = useState<number>(6);
 
   const handleGetCarInUse = async (_skip: number = skip) => {
     try {

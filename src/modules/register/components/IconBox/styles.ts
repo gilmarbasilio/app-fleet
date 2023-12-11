@@ -17,6 +17,18 @@ const variantSizeStyles = (size: SizeProps) => {
       height: 46px;
     `,
   }[size];
+  // outra forma de fazer
+  // const data = {
+  //   small: css`
+  //     width: 32px;
+  //     height: 32px;
+  //   `,
+  //   normal: css`
+  //     width: 46px;
+  //     height: 46px;
+  //   `,
+  // };
+  // return data[size]
 };
 
 export const Container = styled.View<Props>`
